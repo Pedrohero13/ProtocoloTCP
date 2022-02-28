@@ -9,24 +9,21 @@ import java.net.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 /**
  *
  * @author pedro
  */
 public class Servidor {
-
-    private static final String _IP = "25.66.109.25";
+private static final String _IP = "25.66.109.25";
     private static final int _PUERTO = 1234;
     private static final int _BAGLOG = 50;
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws UnknownHostException {
+        // TODO code application logic here
         // TODO code application logic here
         InetAddress ip = InetAddress.getByName(_IP);
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -88,14 +85,13 @@ public class Servidor {
             }
 
         }
-
+        
     }
-
-    public static Log guardar(String ip, int puerto, String entrada, boolean evento) {
+    public static Log guardar(String ip, int puerto, String entrada, boolean evento){
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyy");
         SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");
         formatter.format(new Date());
-
+        
         Log log = new Log();
         log.setFecha(formatter.format(new Date()));
         log.setHora(hora.format(new Date()));
@@ -104,7 +100,7 @@ public class Servidor {
         log.setEntrada(entrada);
         log.setEvento(evento);
         return log;
-
+        
     }
-
+    
 }

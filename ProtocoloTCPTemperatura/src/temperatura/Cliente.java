@@ -5,12 +5,16 @@
  */
 package temperatura;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +45,9 @@ public class Cliente {
         while (true) {
 
             try {
+                Socket socketCliente = null;
+                DataInputStream datosRecepcion = null;
+                DataOutputStream datosSalida = null;
                 Random random = new Random();
 
                 int temp = 10 + random.nextInt((43 - 10) + 1);
@@ -48,22 +55,25 @@ public class Cliente {
                 int co2 = 2950 + random.nextInt((3030 - 2950) + 1);
 
                 //ENVIAR DATOS
-                String cadena = temp + "/" + humedad + "/" + co2;
+                char tipo = 's';
+                String data = temp + "/" + humedad + "/" + co2;
+                byte[] dataInBytes = data.getBytes(StandardCharsets.UTF_8);
 
-                byte[] mensaje_bytes = new byte[10];
-                mensaje_bytes = cadena.getBytes();
+                socketCliente = new Socket(ipServidor, _PUERTO);
+                datosRecepcion = new DataInputStream(socketCliente.getInputStream());
+                datosSalida = new DataOutputStream(socketCliente.getOutputStream());
 
-                DatagramPacket dgmPaquete = new DatagramPacket(mensaje_bytes, cadena.length(), ipServidor, _PUERTO);
-                dgmSocket.send(dgmPaquete);
+                datosSalida.writeChar(tipo);
+                datosSalida.writeInt(dataInBytes.length);
+                datosSalida.write(dataInBytes);
 
-                //LEER RESPUESTA 
-                byte bufferEntrada[] = new byte[256];
-                dgmPaquete = new DatagramPacket(bufferEntrada, 256);
-                dgmSocket.receive(dgmPaquete);
-                String entrada = new String(bufferEntrada).trim();
-                System.out.println("Respuesta: " + entrada);
+                String resultado = datosRecepcion.readUTF();
 
-                Thread.sleep(3000);
+                System.out.println("Solicitud: " + data + " \tResultado: " + resultado);
+                datosRecepcion.close();
+                datosSalida.close();
+
+                Thread.sleep(2000);
 
             } catch (InterruptedException ex) {
                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
