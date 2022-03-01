@@ -76,7 +76,7 @@ private static final String _IP = "25.66.109.25";
                 System.out.println(formatter.format(new Date()) + "\tCliente = " + ipRemitente.toString() + ":" + puertoRemitente
                         + "\tEntrada = " + entrada + "\tSalida = " + salida);
 
-                datosSalida.writeUTF("OK");
+                datosSalida.writeUTF(salida);
                 datosEntrada.close();
                 datosSalida.close();
                 socketPeticion.close();
