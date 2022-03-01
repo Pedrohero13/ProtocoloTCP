@@ -34,14 +34,7 @@ public class Cliente {
     public static void main(String[] args) throws UnknownHostException {
         // TODO code application logic here
         InetAddress ipServidor = InetAddress.getByName(_IP);
-        DatagramSocket dgmSocket = null;
-
-        try {
-
-            dgmSocket = new DatagramSocket();
-        } catch (SocketException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
         while (true) {
 
             try {
